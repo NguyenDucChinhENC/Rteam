@@ -31,3 +31,8 @@
 
 en:
   hello: "Hello world"
+  user:
+    delete_success: "Delete user successfully"
+api:
+  missing_params: "Missing params"
+  invalid_token: "Invalid token"

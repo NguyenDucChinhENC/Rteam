@@ -1,0 +1,5 @@
+en:
+  flashs:
+    messeges:
+      found: "%{name} be found"
+      not_found: "%{name} couldn't be found"
