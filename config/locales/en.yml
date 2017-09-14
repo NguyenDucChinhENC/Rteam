@@ -33,6 +33,10 @@ en:
   hello: "Hello world"
   user:
     delete_success: "Delete user successfully"
+    closed: "Account is closed"
+    update_success: "Update user successfully"
+    restore_success: "Restore user successfully"
+    not_update_success: "Update user not successfully"
 api:
   missing_params: "Missing params"
   invalid_token: "Invalid token"

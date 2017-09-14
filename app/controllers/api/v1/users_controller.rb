@@ -1,5 +1,6 @@
 class Api::V1::UsersController < Api::BaseController
-  before_action :find_object, only: [:show, :destroy]
+  before_action :find_object, only: %i(show update destroy).freeze
+  skip_before_action :authenticate_user_from_token, only: :show
 
   def show
     if @user.status
@@ -14,6 +15,22 @@ class Api::V1::UsersController < Api::BaseController
     end
   end
 
+  def update
+    if @user.status
+      if @user.update_attributes user_params
+        render json: {
+          messages: I18n.t("user.update_success")
+        }, status: :ok
+      else 
+        render json: {
+          messages: I18n.t("user.not_update_success")
+        }, status: 422
+      end
+    else
+      restore_account
+    end
+  end
+
   def destroy
     @user.update_attributes(status: false)
     render json: {
@@ -23,4 +40,19 @@ class Api::V1::UsersController < Api::BaseController
 
   private
 
+  def user_params
+    params.require(:user).permit User::UPDATE_ATTRIBUTES_PARAMS
+  end
+
+  def restore_account
+    if @user.update_attributes user_params
+      render json: {
+        messages: I18n.t("user.restore_success")
+      }, status: :ok
+    else 
+      render json: {
+        messages: I18n.t("user.not_update_success")
+      }, status: 422
+    end
+  end
 end

@@ -4,7 +4,7 @@ class Api::BaseController < ActionController::API
 
   private
 
-  alias_method :authenticable_user_form_token, :authenticable_with_token!
+  alias_method :authenticate_user_from_token, :authenticate_with_token!
 
   def find_variable_name
     return if params[:controller].blank?
@@ -13,10 +13,10 @@ class Api::BaseController < ActionController::API
 
   def ensure_parameters_exist
     find_variable_name
-
+    
     return unless params[find_variable_name].blank?
     render json: {
-      messages: "Missing parameter"
+      messages: I18n.t("api.missing_params")
     }, status: :unprocessable_entity
   end
 
