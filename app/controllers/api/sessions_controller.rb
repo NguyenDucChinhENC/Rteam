@@ -9,11 +9,15 @@ module Api
     def create
       if @user.valid_password? sign_in_params[:password]
         sign_in "user", @user
-        render json: {
-          messages: I18n.t("devise.sessions.signed_in"),
-          data: {user_info: {id: @user.id, name: @user.name,
-            authentication_token: @user.authentication_token}}
-        }, status: :ok
+        token = User.generate_unique_secure_token
+        session = Session.new(:id_user => @user.id, :token_session => token)
+        if session.save
+          render json: {
+            messages: I18n.t("devise.sessions.signed_in"),
+            data: {user_info: {id: @user.id, name: @user.name,
+              authentication_token: session.token_session}}
+          }, status: :ok
+        end
       else
         invalid_login_attempt
       end
@@ -21,7 +25,7 @@ module Api
 
     def destroy
       sign_out @user
-      @user.generate_new_authentication_token
+      @session.destroy
       render json: {
         messages: I18n.t("devise.sessions.signed_out")
       }, status: :ok
@@ -56,9 +60,9 @@ module Api
     end
 
     def valid_token
-      @user = User.find_by authentication_token: request.headers["RT-AUTH-TOKEN"]
+      @session = Session.find_by token_session: request.headers["RT-AUTH-TOKEN"]
 
-      return if @user
+      return if @session
       render json: {
         messages: I18n.t("api.invalid_token")
       }, status: :not_found

@@ -1,7 +1,9 @@
 module Authenticable
   def current_user
+    @current_user_id ||= Session
+      .find_by token_session: request.headers["RT-AUTH-TOKEN"]
     @current_user ||= User
-      .find_by authentication_token: request.headers["RT-AUTH-TOKEN"]
+      .find_by id: @current_user_id
   end
 
   def authenticate_with_token!
