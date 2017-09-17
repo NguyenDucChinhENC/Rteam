@@ -7,6 +7,8 @@ class User < ApplicationRecord
   ATTRIBUTES_PARAMS = [:email, :name, :avatar,
     :password, :password_confirmation].freeze
   UPDATE_ATTRIBUTES_PARAMS = [:email, :name, :avatar, :status].freeze
+
+  has_many :sessions, dependent: :destroy
     
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable

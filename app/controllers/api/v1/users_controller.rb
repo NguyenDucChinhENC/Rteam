@@ -1,5 +1,6 @@
 class Api::V1::UsersController < Api::BaseController
   before_action :find_object, only: %i(show update destroy).freeze
+  before_action :authenticate_with_token!, only: %i(update destroy).freeze
   skip_before_action :authenticate_user_from_token, only: :show
 
   def show
@@ -33,6 +34,7 @@ class Api::V1::UsersController < Api::BaseController
 
   def destroy
     @user.update_attributes(status: false)
+    @user.sessions.destroy
     render json: {
       messages: I18n.t("user.delete_success")
     }, status: :ok

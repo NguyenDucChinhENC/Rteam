@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id_user: MyString
+  integer,: MyString
+  token: MyString
+  string: MyString
+
+two:
+  id_user: MyString
+  integer,: MyString
+  token: MyString
+  string: MyString
