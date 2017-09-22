@@ -5,8 +5,12 @@ class User < ApplicationRecord
 
   VALID_EMAIL_REGEX = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
   ATTRIBUTES_PARAMS = [:email, :name, :avatar,
-    :password, :password_confirmation].freeze
-  UPDATE_ATTRIBUTES_PARAMS = [:email, :name, :avatar, :status].freeze
+    :password, :password_confirmation, :number_phone, 
+    :birthday, :address, :country, :id_number, 
+    :link_facebook, :workplace].freeze
+  UPDATE_ATTRIBUTES_PARAMS = [:email, :name, :avatar, :status,
+    :number_phone, :birthday, :address, :country, :id_number, 
+    :link_facebook, :workplace].freeze
 
   has_many :sessions, dependent: :destroy
     
