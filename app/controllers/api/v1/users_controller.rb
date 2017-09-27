@@ -4,10 +4,10 @@ class Api::V1::UsersController < Api::BaseController
   skip_before_action :authenticate_user_from_token, only: :show
 
   def show
-    if @user.status
+    if user.status
       render json: {
         messages: I18n.t("flashs.messeges.found", name: User),
-        data: {user: @user}
+        data: {user: user_serializer}
       }, status: :ok
     else
       render json: {
@@ -17,8 +17,8 @@ class Api::V1::UsersController < Api::BaseController
   end
 
   def update
-    if @user.status
-      if @user.update_attributes user_params
+    if user.status
+      if user.update_attributes user_params
         render json: {
           messages: I18n.t("user.update_success")
         }, status: :ok
@@ -33,8 +33,8 @@ class Api::V1::UsersController < Api::BaseController
   end
 
   def destroy
-    @user.update_attributes(status: false)
-    @user.sessions.destroy
+    user.update_attributes(status: false)
+    user.sessions.destroy
     render json: {
       messages: I18n.t("user.delete_success")
     }, status: :ok
@@ -42,12 +42,14 @@ class Api::V1::UsersController < Api::BaseController
 
   private
 
+  attr_reader :user
+
   def user_params
     params.require(:user).permit User::UPDATE_ATTRIBUTES_PARAMS
   end
 
   def restore_account
-    if @user.update_attributes user_params
+    if user.update_attributes user_params
       render json: {
         messages: I18n.t("user.restore_success")
       }, status: :ok
@@ -56,5 +58,9 @@ class Api::V1::UsersController < Api::BaseController
         messages: I18n.t("user.not_update_success")
       }, status: 422
     end
+  end
+
+  def user_serializer
+    Serializers::User::UsersSerializer.new(object: user).serializer
   end
 end
