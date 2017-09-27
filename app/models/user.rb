@@ -13,6 +13,7 @@ class User < ApplicationRecord
     :link_facebook, :workplace].freeze
 
   has_many :sessions, dependent: :destroy
+  has_many :member_group, as: :membergrouptable
     
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable

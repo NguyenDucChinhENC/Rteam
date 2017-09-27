@@ -1,0 +1,2 @@
+class Scaffold < ApplicationRecord
+end
