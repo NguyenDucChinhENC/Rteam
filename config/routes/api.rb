@@ -9,6 +9,7 @@ require "api_constraints"
     scope module: :v1,
      constraints: ApiConstraints.new(version: 1, default: true) do
      resources :users, only: %i(show update destroy)
+     resources :groups
    end
 end
 # require "api_constraints"
