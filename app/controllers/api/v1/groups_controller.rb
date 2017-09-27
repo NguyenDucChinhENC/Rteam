@@ -5,7 +5,7 @@ class Api::V1::GroupsController < Api::BaseController
   def index
     tmp = []
     @current_user.member_group.each do |m|
-      tmp.push m.group
+      tmp.push group_mini_serializer m.group
     end
     render json: {
       data: {groups: tmp}
@@ -61,5 +61,9 @@ class Api::V1::GroupsController < Api::BaseController
 
   def check_membered
     @membered = MemberGroup.find_by_membergrouptable_id_and_id_group(@current_user.id, group.id)
+  end
+
+  def group_mini_serializer group_full
+    Serializers::Group::GroupsMiniSerializer.new(object: group_full).serializer
   end
 end
