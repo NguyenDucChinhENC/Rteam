@@ -10,6 +10,7 @@ require "api_constraints"
      constraints: ApiConstraints.new(version: 1, default: true) do
      resources :users, only: %i(show update destroy)
      resources :groups
+     resources :member_groups
    end
 end
 # require "api_constraints"
