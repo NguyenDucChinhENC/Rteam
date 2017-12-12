@@ -1,6 +1,6 @@
 class Api::V1::GroupsController < Api::BaseController
-  before_action :find_object, only: %i(show destroy).freeze
-  before_action :authenticate_with_token!, only: %i(show index destroy).freeze
+  before_action :find_object, only: %i(show update destroy).freeze
+  before_action :authenticate_with_token!, only: %i(show index update destroy).freeze
 
   def index
     tmp = []
@@ -67,6 +67,18 @@ class Api::V1::GroupsController < Api::BaseController
     end
   end
 
+  def update
+    if (group.present? && group.status == true)
+      if (check_membered && membered.admin == true)
+        if group.update_attributes group_params
+          render json: {
+            messages: "Update success"
+          }, status: :ok
+        end
+      end
+    end
+  end
+
   def destroy
     if (group.present? && group.status == true)
       if (check_membered && membered.admin == true)
@@ -81,9 +93,10 @@ class Api::V1::GroupsController < Api::BaseController
 
   attr_reader :group, :membered, :groups
   private
-  # def find_group
-  #   @group = Group.find_by id: params[:id]
-  # end
+  
+  def groups_params
+    params.require(:group).permit Group::ATTRIBUTES_PARAMS
+  end
 
   def show_group
     check_membered
@@ -143,7 +156,7 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def group_mini_serializer group_full
-    Serializers::Group::GroupsMiniSerializer.new(object: group_full, user: @current_user.id).serializer
+    Serializers::Group::GroupsMiniSerializer.new(object: group_full, id_user: @current_user.id).serializer
   end
 
   def groups_name_index_serializer group_full
