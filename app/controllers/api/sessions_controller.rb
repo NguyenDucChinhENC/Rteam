@@ -34,11 +34,11 @@ module Api
     private
 
     def sign_in_params
-      params.require(:sign_in).permit :email, :password
+      params.require(:user).permit :email, :password
     end
 
     def ensure_params_exist
-      return unless params[:sign_in].blank?
+      return unless params[:user].blank?
       render json: {
         messages: I18n.t("api.missing_params")
       }, status: :unauthorized

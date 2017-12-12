@@ -12,8 +12,11 @@ class User < ApplicationRecord
     :number_phone, :birthday, :address, :country, :id_number, 
     :link_facebook, :workplace].freeze
 
+  mount_base64_uploader :avatar, AvatarUploader
+
   has_many :sessions, dependent: :destroy
   has_many :member_group, as: :membergrouptable
+  has_many :events, as: :eventtable
     
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable

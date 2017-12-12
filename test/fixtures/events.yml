@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  eventtable_id: 1
+  eventtable_type: MyString
+  quantity: 
+  time: 2017-10-05 16:48:42
+  location: MyString
+  registration_deadline: 2017-10-05 16:48:42
+  infor: MyString
+  status: false
+
+two:
+  name: MyString
+  eventtable_id: 1
+  eventtable_type: MyString
+  quantity: 
+  time: 2017-10-05 16:48:42
+  location: MyString
+  registration_deadline: 2017-10-05 16:48:42
+  infor: MyString
+  status: false

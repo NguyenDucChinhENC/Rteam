@@ -11,6 +11,7 @@ require "api_constraints"
      resources :users, only: %i(show update destroy)
      resources :groups
      resources :member_groups
+     resources :events
    end
 end
 # require "api_constraints"
