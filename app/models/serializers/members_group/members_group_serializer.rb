@@ -1,5 +1,5 @@
 module Serializers
-  module MemberGroup
+  module MembersGroup
     class MembersGroupSerializer < Serializers::SupportSerializer
 
       attrs :id, :id_group, :admin, :membergrouptable_id, :accept, :member

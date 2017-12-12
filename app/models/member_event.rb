@@ -1,0 +1,3 @@
+class MemberEvent < ApplicationRecord
+  belongs_to :event
+end

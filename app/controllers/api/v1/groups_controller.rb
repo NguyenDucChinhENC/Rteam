@@ -4,13 +4,26 @@ class Api::V1::GroupsController < Api::BaseController
 
   def index
     tmp = []
-    @current_user.member_group.each do |m|
+    groups = @current_user.member_group.page(params[:page]).per(5)
+    groups.each do |m|
       if m.group.status == true
-        tmp.push group_mini_serializer m.group
+        tmp.push group_mini_index_serializer(m.group, @current_user.id)
       end
     end
+    tmp_admin = []
+    groups_1 = @current_user.member_group
+    groups_1.each do |m|
+      if m.group.status == true
+        is_admin = MemberGroup.find_by(membergrouptable_id: @current_user.id, id_group: m.group.id).admin
+          if is_admin
+            tmp_admin.push groups_name_index_serializer(m.group)
+          end
+      end
+    end
+
     render json: {
-      data: {groups: tmp}
+      data: {groups: tmp,
+        admin_groups: tmp_admin}
     }, status: :ok
   end
 
@@ -66,17 +79,28 @@ class Api::V1::GroupsController < Api::BaseController
     end
   end
 
-  attr_reader :group, :membered
+  attr_reader :group, :membered, :groups
   private
   # def find_group
   #   @group = Group.find_by id: params[:id]
   # end
 
   def show_group
+    check_membered
+    tmp_event = []
+    events_list = group.events
+    events_list.each do |event|
+      tmp_event.push event_serializer(event, @current_user.id)
+    end
+    tmp_event.uniq
+    tmp_event = tmp_event.sort_by{|e| e[:created_at]}.reverse
     render json: {
       data: {group: group,
+      events: tmp_event,
       membered: true,
+      admin: membered.admin,
       member_total: list_membered.count,
+      event_total: events_list.count,
       list_membered: list_membered,
       member_waiting: member_waiting}
     }, status: :ok
@@ -113,7 +137,7 @@ class Api::V1::GroupsController < Api::BaseController
     members = MemberGroup.membered group.id
     tmp = []
     members.each do |m|
-      tmp.push user_serializer m.membergrouptable
+      tmp.push member_group_serializer m
     end
     tmp
   end
@@ -122,11 +146,23 @@ class Api::V1::GroupsController < Api::BaseController
     Serializers::Group::GroupsMiniSerializer.new(object: group_full, user: @current_user.id).serializer
   end
 
+  def groups_name_index_serializer group_full
+    Serializers::Group::GroupsNameSerializer.new(object: group_full).serializer
+  end
+
+  def group_mini_index_serializer(group_full, id_user)
+    Serializers::Group::GroupsMiniSerializer.new(object: group_full, id_user: @current_user.id).serializer
+  end
+
   def user_serializer member
     Serializers::User::MiniUsersSerializer.new(object: member).serializer
   end
 
   def member_group_serializer member_group
-    Serializers::MemberGroup::MembersGroupSerializer.new(object: member_group).serializer
+    Serializers::MembersGroup::MembersGroupSerializer.new(object: member_group).serializer
+  end
+
+  def event_serializer(event, id_user)
+    Serializers::Event::EventsSerializer.new(object: event, id_user: id_user).serializer
   end
 end
