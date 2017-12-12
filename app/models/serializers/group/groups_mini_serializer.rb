@@ -8,12 +8,16 @@ module Serializers
       def admin
       	# @membered = MemberGroup.find_by_membergrouptable_id_and_id_group(id_user,id)
       	@membered = MemberGroup.find_by(membergrouptable_id: id_user, id_group: id)
-      	@membered.admin
+        if (@membered)
+      	 @membered.admin
+        end
       end
 
       def time_ago
       	@membered = MemberGroup.find_by_membergrouptable_id_and_id_group(id_user,id)
-        time_ago_in_words(@membered.created_at)
+        if (@membered)
+          time_ago_in_words(@membered.created_at)
+        end
       end
     end
   end
