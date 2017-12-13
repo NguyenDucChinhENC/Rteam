@@ -36,6 +36,7 @@ class Api::V1::GroupsController < Api::BaseController
           render json: {
           data: {group: group_mini_serializer(group),
           membered: false,
+          id_membered_group: membered.id,
           accept: true}
           }, status: :ok
         end
@@ -113,6 +114,7 @@ class Api::V1::GroupsController < Api::BaseController
       membered: true,
       admin: membered.admin,
       member_total: list_membered.count,
+      id_membered_group: membered.id,
       event_total: events_list.count,
       list_membered: list_membered,
       member_waiting: member_waiting}
