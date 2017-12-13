@@ -37,6 +37,12 @@ class Api::V1::MemberGroupsController < Api::BaseController
       if check_membered
         membered.destroy
       end
+    else
+      if check_membered
+        if membered.membergrouptable_id == @current_user.id && membered.membergrouptable_type == "User"
+          membered.destroy
+        end
+      end
     end
   end
 
