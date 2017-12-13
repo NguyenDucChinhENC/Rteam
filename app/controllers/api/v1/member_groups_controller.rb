@@ -35,7 +35,12 @@ class Api::V1::MemberGroupsController < Api::BaseController
   def destroy
     if check_admin
       if check_membered
-        membered.destroy
+        if member_group.destroy
+          render json: {
+          messages: I18n.t("member.delete_success"),
+            data: { membered: member_group}
+          }, status: :ok
+        end
       end
     else
       if check_membered

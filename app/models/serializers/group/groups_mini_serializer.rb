@@ -3,7 +3,7 @@ include ActionView::Helpers::DateHelper
 module Serializers
   module Group
     class GroupsMiniSerializer < Serializers::SupportSerializer
-      attrs :id, :name, :description, :time_ago, :admin
+      attrs :id, :name, :description, :time_ago, :admin, :cover
 
       def admin
       	# @membered = MemberGroup.find_by_membergrouptable_id_and_id_group(id_user,id)
