@@ -158,15 +158,15 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def group_mini_serializer group_full
-    Serializers::Group::GroupsMiniSerializer.new(object: group_full, id_user: @current_user.id).serializer
+    Serializers::Groups::GroupsMiniSerializer.new(object: group_full, id_user: @current_user.id).serializer
   end
 
   def groups_name_index_serializer group_full
-    Serializers::Group::GroupsNameSerializer.new(object: group_full).serializer
+    Serializers::Groups::GroupsNameSerializer.new(object: group_full).serializer
   end
 
   def group_mini_index_serializer(group_full, id_user)
-    Serializers::Group::GroupsMiniSerializer.new(object: group_full, id_user: @current_user.id).serializer
+    Serializers::Groups::GroupsMiniSerializer.new(object: group_full, id_user: @current_user.id).serializer
   end
 
   def user_serializer member
