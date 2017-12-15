@@ -75,7 +75,7 @@ class Api::V1::EventsController < Api::BaseController
 
   def show_event
     render json: {
-      data: {event: event}
+      data: {event: event_serializer(event, @current_user.id)}
     }, status: :ok
   end
 
@@ -97,6 +97,10 @@ class Api::V1::EventsController < Api::BaseController
     else
       return false
     end
+  end
+
+  def event_serializer(event, id_user)
+    Serializers::Event::EventsShowSerializer.new(object: event, id_user: id_user).serializer
   end
 
 end

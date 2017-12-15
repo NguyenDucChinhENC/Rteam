@@ -1,7 +1,7 @@
 include ActionView::Helpers::DateHelper
 
 module Serializers
-  module Group
+  module Groups
     class GroupsMiniSerializer < Serializers::SupportSerializer
       attrs :id, :name, :description, :time_ago, :admin, :cover
 
