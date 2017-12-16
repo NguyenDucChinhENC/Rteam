@@ -45,7 +45,7 @@ class Api::V1::EventsController < Api::BaseController
         }, status: :ok
       else
         render json: {
-          messeges: "Update Not Success"
+          messeges: event.errors.full_messages
         }, status: 405
       end
     else

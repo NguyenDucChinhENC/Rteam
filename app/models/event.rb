@@ -9,17 +9,17 @@ class Event < ApplicationRecord
   validates :time, presence: true
   validates :registration_deadline, presence: true
   validates :infor, presence: true
-  validates :check_deadline, presence: true
+  # validates :check_deadline, presence: true
 
   private
 
-  def check_deadline
-    if registration_deadline.present? && registration_deadline > Date.today && 
-      time.present? && registration_deadline < time
-      return true
-    else 
-      errors.add(:base, "Errors on Date Time")
-      return false
-    end
-  end
+  # def check_deadline
+  #   if registration_deadline.present? && registration_deadline > Date.today && 
+  #     time.present? && registration_deadline < time
+  #     return true
+  #   else 
+  #     errors.add(:base, "Errors on Date Time")
+  #     return false
+  #   end
+  # end
 end
