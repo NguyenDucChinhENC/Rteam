@@ -170,7 +170,7 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def user_serializer member
-    Serializers::User::MiniUsersSerializer.new(object: member).serializer
+    Serializers::Users::MiniUsersSerializer.new(object: member).serializer
   end
 
   def member_group_serializer member_group
@@ -178,6 +178,6 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def event_serializer(event, id_user)
-    Serializers::Event::EventsSerializer.new(object: event, id_user: id_user).serializer
+    Serializers::Events::EventsSerializer.new(object: event, id_user: id_user).serializer
   end
 end

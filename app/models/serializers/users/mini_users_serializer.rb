@@ -1,5 +1,5 @@
 module Serializers
-  module User
+  module Users
     class MiniUsersSerializer < Serializers::SupportSerializer
       attrs :id, :email, :name, :avatar
     end

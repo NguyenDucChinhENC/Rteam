@@ -1,5 +1,5 @@
 module Serializers
-  module User
+  module Users
     class MemberWaitingAcceptSerializer < Serializers::SupportSerializer
       attrs :id, :email, :name, :avatar, :id_member_group
     end
