@@ -16,8 +16,9 @@ class User < ApplicationRecord
 
   has_many :sessions, dependent: :destroy
   has_many :member_group, as: :membergrouptable
+  has_many :member_event, as: :membereventtable
   has_many :events, as: :eventtable
-    
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 

@@ -7,7 +7,7 @@ module Serializers
       delegate :id, to: :object
 
     def member
-      tmp = Serializers::User::MiniUsersSerializer.new(object: object.membergrouptable).serializer
+      tmp = Serializers::Users::MiniUsersSerializer.new(object: object.membergrouptable).serializer
     end
     end
   end

@@ -61,6 +61,6 @@ class Api::V1::UsersController < Api::BaseController
   end
 
   def user_serializer
-    Serializers::User::UsersSerializer.new(object: user).serializer
+    Serializers::Users::UsersSerializer.new(object: user).serializer
   end
 end

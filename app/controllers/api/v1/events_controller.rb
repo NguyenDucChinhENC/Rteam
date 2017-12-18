@@ -100,7 +100,7 @@ class Api::V1::EventsController < Api::BaseController
   end
 
   def event_serializer(event, id_user)
-    Serializers::Event::EventsShowSerializer.new(object: event, id_user: id_user).serializer
+    Serializers::Events::EventsShowSerializer.new(object: event, id_user: id_user).serializer
   end
 
 end
