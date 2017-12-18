@@ -1,5 +1,8 @@
 class Event < ApplicationRecord
-  ATTRIBUTES_PARAMS = [:name, :quantity, :time, :location, :registration_deadline, :infor, :status].freeze
+  ATTRIBUTES_PARAMS = [:name, :quantity, :time, :location, :registration_deadline, :photo, :infor, :status].freeze
+
+  mount_base64_uploader :photo, CoverUploader
+
   belongs_to :eventtable, polymorphic: true
   has_many :admin_events
   has_many :member_events
