@@ -55,7 +55,7 @@ class Api::V1::MemberGroupsController < Api::BaseController
   private
 
   def check_admin
-    if check_membered && @membered.accept == true && @membered.admin == true
+    if check_membered && @membered.accept && @membered.admin
      return true
     else
       return false
