@@ -1,10 +1,25 @@
 class Api::V1::EventsController < Api::BaseController
-  before_action :find_object, only: %i(index show update destroy).freeze
-  before_action :authenticate_with_token!, only: %i(create update destroy).freeze
+  before_action :find_object, only: %i(show update destroy).freeze
+  before_action :authenticate_with_token!, only: %i(index create update destroy).freeze
 
   def index
+    member_events = @current_user.member_event
+    tmp_events = []
+    tmp_events_comming = []
+    member_events.each do |m|
+      event = Event.find_by id: m.event_id
+      tmp_events.push event_serializer(event, @current_user.id)
+      if event.time > Date.today
+        tmp_events_comming.push event_serializer(event, @current_user.id)
+      end
+    end
+    tmp_events.uniq
+    tmp_events = tmp_events.sort_by{|e| e[:created_at]}.reverse
     render json: {
-      data: {ma: "hihi"}
+      data: {
+        events: tmp_events,
+        events_comming: tmp_events_comming
+      }
     }, status: :ok
   end
 
@@ -67,15 +82,17 @@ class Api::V1::EventsController < Api::BaseController
     end
   end
 
-  attr_reader :event, :group
+  attr_reader :event, :group, :events
+
   private
+
   def event_params
     params.require(:event).permit Event::ATTRIBUTES_PARAMS
   end
 
   def show_event
     render json: {
-      data: {event: event_serializer(event, @current_user.id)}
+      data: {event: event_show_serializer(event, @current_user.id)}
     }, status: :ok
   end
 
@@ -99,8 +116,12 @@ class Api::V1::EventsController < Api::BaseController
     end
   end
 
-  def event_serializer(event, id_user)
+  def event_show_serializer(event, id_user)
     Serializers::Events::EventsShowSerializer.new(object: event, id_user: id_user).serializer
+  end
+
+  def event_serializer(event, id_user)
+    Serializers::Events::EventsSerializer.new(object: event, id_user: id_user).serializer
   end
 
 end

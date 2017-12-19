@@ -3,17 +3,19 @@ class Api::V1::GroupsController < Api::BaseController
   before_action :authenticate_with_token!, only: %i(show index update destroy).freeze
 
   def index
+
     tmp = []
     groups = @current_user.member_group.page(params[:page]).per(5)
     groups.each do |m|
-      if m.group.status == true
+      if m.group.status
         tmp.push group_mini_index_serializer(m.group, @current_user.id)
       end
     end
+    
     tmp_admin = []
     groups_1 = @current_user.member_group
     groups_1.each do |m|
-      if m.group.status == true
+      if m.group.status
         is_admin = MemberGroup.find_by(membergrouptable_id: @current_user.id, id_group: m.group.id).admin
           if is_admin
             tmp_admin.push groups_name_index_serializer(m.group)
@@ -28,9 +30,9 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def show
-    if (group.present? && group.status == true)
+    if (group.present? && group.status)
       if check_membered
-        if (membered.accept == true)
+        if (membered.accept)
           show_group
         else
           render json: {
@@ -69,8 +71,8 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def update
-    if (group.present? && group.status == true)
-      if (check_membered && membered.admin == true)
+    if (group.present? && group.status)
+      if (check_membered && membered.admin)
         if group.update_attributes group_params
           render json: {
             messages: "Update success"
@@ -81,8 +83,8 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def destroy
-    if (group.present? && group.status == true)
-      if (check_membered && membered.admin == true)
+    if (group.present? && group.status)
+      if (check_membered && membered.admin)
         if group.update_attributes(status: false)
           render json: {
             messages: I18n.t("group.destroy_success")
