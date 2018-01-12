@@ -15,6 +15,7 @@ require "api_constraints"
      resources :events
      resources :member_events
      resources :admin_events
+     resources :comments
    end
 end
 # require "api_constraints"

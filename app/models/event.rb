@@ -6,6 +6,7 @@ class Event < ApplicationRecord
   belongs_to :eventtable, polymorphic: true
   has_many :admin_events
   has_many :member_events
+  has_many :comments
 
   validates :name, presence: true
   validates :quantity, presence: true
