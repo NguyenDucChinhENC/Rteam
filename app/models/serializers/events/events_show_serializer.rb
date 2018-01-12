@@ -6,53 +6,48 @@ module Serializers
       attrs :id, :name, :eventtable_id, :eventtable_type
       attrs :quantity, :time, :registration_deadline, :owner, :photo
       attrs :location, :infor, :admin, :member, :created_at, :time_ago
-      attrs :member_joined, :list_admin
+      attrs :member_joined, :list_admin, :comments
 
       def admin
-        if admin_event = AdminEvent.find_by_event_id_and_user_id(id, id_user)
-          return true
-        else
-          return false
-        end
+        admin_event = AdminEvent.find_by_event_id_and_user_id(id, id_user)? true : false
       end
 
       def member
-        if member_event = MemberEvent.find_by(event_id: id, membereventtable_id: id_user)
-          return member_event.id
-        else
-          return false
-        end
+        member_event = MemberEvent.
+          find_by(event_id: id, membereventtable_id: id_user)
+        member_event ? member_event.id : false
       end
 
       def list_admin
-        @event = Event.find_by(id: id);
         tmp =[];
-        @event.admin_events.each do |a|
-          user = User.find_by(id: a.user_id)
-          tmp.push Serializers::Users::UsersSerializer.new(object: user, event_id: @event.id).serializer
+        object.admin_events.each do |a|
+          tmp.push Serializers::Users::UsersSerializer.
+            new(object: a.user, event_id: object.id).serializer
         end
         tmp
-      end
-
-      def time_ago
-        time_ago_in_words(created_at)
       end
 
       def owner
         if eventtable_type = "Group"
-          @group = Group::find_by id: eventtable_id
-          return { :id => @group.id,  :name =>@group.name} 
+          return { :id => object.eventtable.id,  :name => object.eventtable.name} 
         end
       end
 
       def member_joined
-        @event = Event.find_by(id: id);
         tmp = [];
-        @event.member_events.each do |m|
-          user = User.find_by(id: m.membereventtable_id)
-          tmp.push Serializers::Users::MiniUsersEventSerializer.new(object: user, event_id: @event.id).serializer
+        object.member_events.each do |m|
+          tmp.push Serializers::Users::MiniUsersEventSerializer.
+            new(object: m.membereventtable, event_id: object.id).serializer
         end
         tmp
+      end
+
+      def comments
+        object.comments
+      end
+
+      def time_ago
+        time_ago_in_words(created_at)
       end
     end
   end

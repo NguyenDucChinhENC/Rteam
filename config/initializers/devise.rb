@@ -7,7 +7,7 @@ Devise.setup do |config|
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
   # config.secret_key = '4760128aa413b545dc7dfca6609aaf088ec99a189a9ba283178b8e41acb68652235b2807ed555885cdf270d037ba28f07e5299aea715c64e70c794169f7357b6'
-
+  config.secret_key = '8ba2d41d675222c0be300a765c90b27b0ee8ea527129b83d543791a3a7dd0cf33ac20f7ea5d5bd96a286d002003e6ba8413a2cb8b02ca87eb52dc08cd2995375'
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
@@ -252,7 +252,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  config.omniauth :facebook, '314754715690660', '9c66b4647c87080e976c198953be4fbb', callback_url: "http://localhost:3000/users/auth/facebook/callback"
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

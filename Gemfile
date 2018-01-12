@@ -25,6 +25,8 @@ gem "kaminari"
 gem "ransack"
 gem "elasticsearch-model"
 gem "elasticsearch-rails"
+gem "omniauth"
+gem "omniauth-facebook"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
