@@ -3,29 +3,9 @@ class Api::V1::GroupsController < Api::BaseController
   before_action :authenticate_with_token!, only: %i(show index update destroy).freeze
 
   def index
-
-    tmp = []
-    groups = @current_user.member_group.page(params[:page]).per(5)
-    groups.each do |m|
-      if m.group.status
-        tmp.push group_mini_index_serializer(m.group, @current_user.id)
-      end
-    end
-    
-    tmp_admin = []
-    groups_1 = @current_user.member_group
-    groups_1.each do |m|
-      if m.group.status
-        is_admin = MemberGroup.find_by(membergrouptable_id: @current_user.id, id_group: m.group.id).admin
-          if is_admin
-            tmp_admin.push groups_name_index_serializer(m.group)
-          end
-      end
-    end
-
     render json: {
-      data: {groups: tmp,
-        admin_groups: tmp_admin}
+      data: {groups: all_groups,
+        admin_groups: all_groups_admined}
     }, status: :ok
   end
 
@@ -95,7 +75,32 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   attr_reader :group, :membered, :groups
+  
   private
+
+  def all_groups
+    groups_serializer = []
+    groups = @current_user.member_group.page(params[:page]).per(5)
+    groups.each do |m|
+      if m.group.status
+        groups_serializer.push group_mini_index_serializer(m.group, @current_user.id)
+      end
+    end
+    groups_serializer
+  end
+
+  def all_groups_admined
+    groups_admined = []
+    groups_1 = @current_user.member_group
+    groups_1.each do |m|
+      if m.group.status
+        is_admin = MemberGroup.find_by(membergrouptable_id: @current_user.id, id_group: m.group.id).admin
+          if is_admin
+            groups_admined.push groups_name_index_serializer(m.group)
+          end
+      end
+    end
+  end
   
   def groups_params
     params.require(:group).permit Group::ATTRIBUTES_PARAMS

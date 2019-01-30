@@ -8,8 +8,8 @@ module Serializers
       @id_user ||= nil
     end
 
-    def event_id
-      @event_id ||=nil
+    def id_event
+      @id_event ||=nil
     end
   end
 end

@@ -3,7 +3,7 @@ module Serializers
     def initialize args
       @object = args[:object]
       @id_user = args[:id_user]
-      @event_id = args[:event_id]
+      @id_event = args[:id_event]
       @class_name = args[:class_name].to_s
       @scope = args[:scope]
       @scope.each{|key, value| instance_variable_set "@#{key}", value} if @scope

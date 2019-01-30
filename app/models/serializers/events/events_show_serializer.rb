@@ -34,16 +34,17 @@ module Serializers
       end
 
       def member_joined
-        tmp = [];
+        @event = Event.find_by(id: id)
+        tmp = []
         object.member_events.each do |m|
-          tmp.push Serializers::Users::MiniUsersEventSerializer.
-            new(object: m.membereventtable, event_id: object.id).serializer
-        end
-        tmp
+           tmp.push Serializers::Users::MiniUsersEventSerializer.
+           new(object: m.membereventtable, id_event: object.id).serializer
+          end
+          tmp
       end
 
       def comments
-        object.comments
+        Serializers::Comments::CommentsSerializer.new(object: object.comments).serializer
       end
 
       def time_ago

@@ -11,6 +11,7 @@ class Api::V1::SearchController < Api::BaseController
       	tmp.push group_serializer(m)
       end
     end
+    byebug
     render json: {
       messages: "Search succsess",
       data: {

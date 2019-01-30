@@ -6,7 +6,7 @@ module Serializers
       attrs :member_event_id
 
       def member_event_id
-      	member = MemberEvent.find_by(event_id: event_id, membereventtable_id: id)
+      	member = MemberEvent.find_by(event_id: id_event, membereventtable_id: id)
       	member.id
       end
     end
