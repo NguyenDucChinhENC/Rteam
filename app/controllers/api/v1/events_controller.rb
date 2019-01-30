@@ -3,22 +3,10 @@ class Api::V1::EventsController < Api::BaseController
   before_action :authenticate_with_token!, only: %i(index create update destroy).freeze
 
   def index
-    member_events = @current_user.member_event
-    tmp_events = []
-    tmp_events_comming = []
-    member_events.each do |m|
-      event = Event.find_by id: m.event_id
-      tmp_events.push event_serializer(event, @current_user.id)
-      if event.time > Date.today
-        tmp_events_comming.push event_serializer(event, @current_user.id)
-      end
-    end
-    tmp_events.uniq
-    tmp_events = tmp_events.sort_by{|e| e[:created_at]}.reverse
     render json: {
       data: {
-        events: tmp_events,
-        events_comming: tmp_events_comming
+        events: all_events,
+        events_comming: events_comming
       }
     }, status: :ok
   end
@@ -32,9 +20,8 @@ class Api::V1::EventsController < Api::BaseController
   def create
     if params[:id_group]
       group = Group.find_by id: params[:id_group]
-      if check_admin_group
+      if check_admin_group params[:id_group]
         @event = group.events.new event_params
-        # byebug
         if @event.save
           @admin_event = @event.admin_events.new(user_id: @current_user.id)
           if @admin_event.save
@@ -44,7 +31,6 @@ class Api::V1::EventsController < Api::BaseController
             error_create
           end
         else
-          # byebug
           error_create
         end
       end
@@ -52,26 +38,19 @@ class Api::V1::EventsController < Api::BaseController
   end
 
   def update
-    if check_admin_event
+    if check_admin_event event.id
       if event.update_attributes event_params
-        render json: {
-          messeges: "Update Success",
-          event: event
-        }, status: :ok
+        render_json_success("Update Success", event)
       else
-        render json: {
-          messeges: event.errors.full_messages
-        }, status: 405
+        render_json_not_success(event.errors.full_messages, 405)
       end
     else
-      render json: {
-        messeges: "You can't update this event"
-      }, status: 406
+      render_json_not_success("You can't update this event", 406)
     end
   end
 
   def destroy
-    if check_admin_event
+    if check_admin_event event.id
       time_now = Time.now
       if event.time > time_now
         render json: {
@@ -90,6 +69,28 @@ class Api::V1::EventsController < Api::BaseController
     params.require(:event).permit Event::ATTRIBUTES_PARAMS
   end
 
+  def all_events
+    events = []
+    member_events = @current_user.member_event
+    member_events.each do |m|
+      events.push event_serializer(m.event, @current_user.id)
+    end
+    events.uniq
+    events = events.sort_by{|e| e[:created_at]}.reverse
+  end
+
+  def events_comming
+    events_comming = []
+    member_events = @current_user.member_event
+    member_events.each do |m|
+      event = Event.find_by id: m.event_id
+      if event.time > Date.today
+        events_comming.push event_serializer(event, @current_user.id)
+      end
+    end
+    events_comming
+  end
+
   def show_event
     render json: {
       data: {event: event_show_serializer(event, @current_user.id)}
@@ -97,23 +98,9 @@ class Api::V1::EventsController < Api::BaseController
   end
 
   def error_create
-    # byebug
     render json: {
-      # messeges: "Error on create",
       error: @event.errors.full_messages
     }, status: 404
-  end
-
-  def check_admin_group
-    MemberGroup.find_by_membergrouptable_id_and_id_group(@current_user.id, params[:id_group]).admin
-  end
-
-  def check_admin_event
-    if AdminEvent.find_by_event_id_and_user_id(params[:id], @current_user.id)
-      return true
-    else
-      return false
-    end
   end
 
   def event_show_serializer(event, id_user)
