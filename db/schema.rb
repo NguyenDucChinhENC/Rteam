@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 20180108170806) do
 
-  create_table "admin_events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "admin_events", force: :cascade do |t|
     t.bigint "event_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -20,7 +23,7 @@ ActiveRecord::Schema.define(version: 20180108170806) do
     t.index ["event_id"], name: "index_admin_events_on_event_id"
   end
 
-  create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "comments", force: :cascade do |t|
     t.integer "user_id"
     t.integer "event_id"
     t.text "body"
@@ -28,7 +31,7 @@ ActiveRecord::Schema.define(version: 20180108170806) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "events", force: :cascade do |t|
     t.string "name"
     t.integer "eventtable_id"
     t.string "eventtable_type"
@@ -44,7 +47,7 @@ ActiveRecord::Schema.define(version: 20180108170806) do
     t.index ["eventtable_id"], name: "index_events_on_eventtable_id"
   end
 
-  create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "groups", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.boolean "public_status"
@@ -55,7 +58,7 @@ ActiveRecord::Schema.define(version: 20180108170806) do
     t.string "cover"
   end
 
-  create_table "member_events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "member_events", force: :cascade do |t|
     t.bigint "event_id"
     t.integer "user_id"
     t.boolean "status", default: true
@@ -66,18 +69,18 @@ ActiveRecord::Schema.define(version: 20180108170806) do
     t.index ["event_id"], name: "index_member_events_on_event_id"
   end
 
-  create_table "member_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "member_groups", force: :cascade do |t|
+    t.integer "id_user"
     t.integer "id_group"
     t.boolean "admin", default: false
     t.boolean "status", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "membergrouptable_id"
     t.string "membergrouptable_type"
     t.boolean "accept", default: true
   end
 
-  create_table "replies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "replies", force: :cascade do |t|
     t.integer "father_id"
     t.integer "user_id"
     t.text "body"
@@ -85,14 +88,14 @@ ActiveRecord::Schema.define(version: 20180108170806) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "sessions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "sessions", force: :cascade do |t|
     t.integer "id_user"
     t.string "token_session"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -109,13 +112,6 @@ ActiveRecord::Schema.define(version: 20180108170806) do
     t.datetime "updated_at", null: false
     t.string "authentication_token"
     t.boolean "status", default: true
-    t.integer "number_phone"
-    t.date "birthday"
-    t.string "address"
-    t.string "country"
-    t.string "id_number"
-    t.string "link_facebook"
-    t.string "workplace"
     t.string "provider"
     t.string "uid"
     t.text "image"
