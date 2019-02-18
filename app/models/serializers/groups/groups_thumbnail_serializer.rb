@@ -14,7 +14,6 @@ module Serializers
       end
 
       def link_cover
-      	:
       end
 
       def time_ago
