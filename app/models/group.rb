@@ -35,6 +35,7 @@ class Group < ApplicationRecord
 #     end
 #   end
 # end
+end
 
 # Group.__elasticsearch__.client.indices.delete index: Group.index_name rescue nil
 # Group.__elasticsearch__.client.indices.create \
