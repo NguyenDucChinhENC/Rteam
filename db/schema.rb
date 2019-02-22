@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190220014736) do
+ActiveRecord::Schema.define(version: 20190222013957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20190220014736) do
     t.datetime "updated_at", null: false
     t.string "membergrouptable_type"
     t.boolean "accept", default: true
+    t.integer "membergrouptable_id"
   end
 
   create_table "replies", force: :cascade do |t|

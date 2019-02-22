@@ -18,6 +18,7 @@ class Api::V1::EventsController < Api::BaseController
   end
 
   def create
+    byebug
     if params[:id_group]
       group = Group.find_by id: params[:id_group]
       if check_admin_group params[:id_group]
