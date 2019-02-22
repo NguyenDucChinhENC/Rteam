@@ -45,7 +45,11 @@ class Api::V1::MemberGroupsController < Api::BaseController
     else
       if check_membered
         if membered.membergrouptable_id == @current_user.id && membered.membergrouptable_type == "User"
-          membered.destroy
+          if membered.destroy
+            render json: {
+            messages: I18n.t("member.delete_success")
+            }, status: :ok
+          end
         end
       end
     end
